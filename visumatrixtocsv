@@ -1,0 +1,37 @@
+import numpy as np
+import requests
+import matplotlib.pyplot as pyplot
+import matplotlib.image as mpimg
+import sys
+import datetime
+from tensorflow import keras
+from tensorflow.keras.models import Model
+import tensorflow as tf
+import cv2
+import pathlib
+import os
+import zipfile
+import tensorflow as tf
+from tensorflow.keras.utils import plot_model
+
+# Load the model from the HDF5 file
+model = tf.keras.models.load_model('tensorboard.h5')
+
+# Display model summary
+print("Model Summary:")
+model.summary()
+
+# Open a file in write mode
+with open('convolution_filters.txt', 'w') as file:
+    # summarize filter shapes
+    for layer in model.layers:
+        # check for convolutional layer
+        if 'conv' not in layer.name:
+            continue
+        # get filter weights
+        filters, biases = layer.get_weights()
+        file.write(f"Layer Name: {layer.name}\n")
+        file.write(f"Filter Shape: {filters.shape}\n")
+        file.write("Filters:\n")
+        file.write(np.array2string(filters, separator=', ') + '\n\n')
+
